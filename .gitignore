@@ -2,6 +2,8 @@ node_modules
 package-lock.json
 /test/*.png
 versions/
+public/textures/
+public/blocksStates/
 examples/standalone/public/index.js
 examples/standalone/public/worker.js
 examples/standalone/public/textures/

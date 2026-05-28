@@ -8,6 +8,7 @@
     "test": "npm run test",
     "pretest": "npm run lint",
     "lint": "standard",
+    "prepare": "node viewer/prerender.js",
     "fix": "standard --fix"
   },
   "author": "PrismarineJS",
