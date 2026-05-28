@@ -2,8 +2,30 @@ const THREE = require('three')
 const { MeshLine, MeshLineMaterial } = require('three.meshline')
 const { dispose3 } = require('./dispose')
 
+function makeTextSprite (text, color = '#ffffff') {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  const fontSize = 48
+  ctx.font = `bold ${fontSize}px monospace`
+  const textWidth = ctx.measureText(text).width
+  canvas.width = textWidth + 16
+  canvas.height = fontSize + 16
+  ctx.font = `bold ${fontSize}px monospace`
+  ctx.fillStyle = color
+  ctx.fillText(text, 8, fontSize + 2)
+  const texture = new THREE.CanvasTexture(canvas)
+  const material = new THREE.SpriteMaterial({ map: texture, depthTest: false })
+  const sprite = new THREE.Sprite(material)
+  sprite.scale.set(canvas.width / 64, canvas.height / 64, 1)
+  return sprite
+}
+
 function getMesh (primitive, camera) {
-  if (primitive.type === 'line') {
+  if (primitive.type === 'text') {
+    const sprite = makeTextSprite(primitive.text, primitive.color)
+    sprite.position.set(primitive.position.x, primitive.position.y, primitive.position.z)
+    return sprite
+  } else if (primitive.type === 'line') {
     const color = primitive.color ? primitive.color : 0xff0000
     const resolution = new THREE.Vector2(window.innerWidth / camera.zoom, window.innerHeight / camera.zoom)
     const material = new MeshLineMaterial({ color, resolution, sizeAttenuation: false, lineWidth: 8 })
@@ -16,6 +38,24 @@ function getMesh (primitive, camera) {
     const line = new MeshLine()
     line.setPoints(points)
     return new THREE.Mesh(line, material)
+  } else if (primitive.type === 'box') {
+    const color = primitive.color ?? 0x00ff00
+    const sx = primitive.end.x - primitive.start.x
+    const sy = primitive.end.y - primitive.start.y
+    const sz = primitive.end.z - primitive.start.z
+    const geometry = new THREE.BoxGeometry(Math.abs(sx), Math.abs(sy), Math.abs(sz))
+    const material = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.35, side: THREE.DoubleSide })
+    const mesh = new THREE.Mesh(geometry, material)
+    mesh.position.set(primitive.start.x + sx / 2, primitive.start.y + sy / 2, primitive.start.z + sz / 2)
+    return mesh
+  } else if (primitive.type === 'sphere') {
+    const color = primitive.color ?? 0xff00ff
+    const radius = primitive.radius ?? 0.5
+    const geometry = new THREE.SphereGeometry(radius, 16, 16)
+    const material = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.5, wireframe: true })
+    const mesh = new THREE.Mesh(geometry, material)
+    mesh.position.set(primitive.position.x, primitive.position.y, primitive.position.z)
+    return mesh
   } else if (primitive.type === 'boxgrid') {
     const color = primitive.color ? primitive.color : 'aqua'
 
