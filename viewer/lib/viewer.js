@@ -9,7 +9,10 @@ const { Vec3 } = require('vec3')
 class Viewer {
   constructor (renderer) {
     this.scene = new THREE.Scene()
-    this.scene.background = new THREE.Color('lightblue')
+    this.scene.background = new THREE.Color(0x171717)
+
+    const gridHelper = new THREE.GridHelper(256, 256, 0x606060, 0x606060)
+    this.scene.add(gridHelper)
 
     this.ambientLight = new THREE.AmbientLight(0xcccccc)
     this.scene.add(this.ambientLight)

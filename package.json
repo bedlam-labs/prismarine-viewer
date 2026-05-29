@@ -1,5 +1,5 @@
 {
-  "name": "prismarine-viewer",
+  "name": "@aidentran900/prismarine-viewer",
   "version": "1.33.0",
   "description": "Web based viewer",
   "main": "index.js",
