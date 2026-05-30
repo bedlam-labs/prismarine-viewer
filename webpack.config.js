@@ -9,16 +9,27 @@ const blockedIndexFiles = ['blocksB2J', 'blocksJ2B', 'blockMappings', 'steve', '
 const allowedWorkerFiles = ['blocks', 'blockCollisionShapes', 'tints', 'blockStates',
   'biomes', 'features', 'version', 'legacy', 'versions', 'version', 'protocolVersions']
 
+const isDev = process.env.NODE_ENV !== 'production'
+
+const esbuildRule = {
+  test: /\.js$/,
+  loader: 'esbuild-loader',
+  options: { target: 'es2015' }
+}
+
 const indexConfig = {
   entry: './lib/index.js',
-  mode: 'production',
+  mode: isDev ? 'development' : 'production',
+  cache: { type: 'filesystem' },
+  module: { rules: [esbuildRule] },
   output: {
     path: path.resolve(__dirname, './public'),
     filename: './index.js'
   },
   resolve: {
     fallback: {
-      zlib: false
+      zlib: false,
+      events: require.resolve('events/')
     }
   },
   plugins: [
@@ -52,7 +63,9 @@ const indexConfig = {
 
 const workerConfig = {
   entry: './viewer/lib/worker.js',
-  mode: 'production',
+  mode: isDev ? 'development' : 'production',
+  cache: { type: 'filesystem' },
+  module: { rules: [esbuildRule] },
   output: {
     path: path.join(__dirname, '/public'),
     filename: './worker.js'

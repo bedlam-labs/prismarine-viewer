@@ -9,10 +9,13 @@ const { Vec3 } = require('vec3')
 class Viewer {
   constructor (renderer) {
     this.scene = new THREE.Scene()
-    this.scene.background = new THREE.Color(0x171717)
+    this.scene.background = new THREE.Color(0x292929)
 
-    const gridHelper = new THREE.GridHelper(256, 256, 0x606060, 0x606060)
-    this.scene.add(gridHelper)
+    const blockGrid = new THREE.GridHelper(256, 256, 0x4a4a4a, 0x4a4a4a)
+    this.scene.add(blockGrid)
+
+    const chunkGrid = new THREE.GridHelper(256, 16, 0x606060, 0x606060)
+    this.scene.add(chunkGrid)
 
     this.ambientLight = new THREE.AmbientLight(0xcccccc)
     this.scene.add(this.ambientLight)

@@ -9,7 +9,10 @@
     "pretest": "npm run lint",
     "lint": "standard",
     "prepare": "node viewer/prerender.js",
-    "fix": "standard --fix"
+    "fix": "standard --fix",
+    "build": "NODE_ENV=production webpack --config webpack.config.js",
+    "build:dev": "webpack --config webpack.config.js",
+    "build:watch": "webpack --config webpack.config.js --watch"
   },
   "author": "PrismarineJS",
   "license": "MIT",
@@ -37,6 +40,7 @@
   },
   "devDependencies": {
     "assert": "^2.0.0",
+    "events": "^3.3.0",
     "buffer": "^6.0.3",
     "canvas": "^3.1.0",
     "fs-extra": "^11.0.0",
@@ -53,6 +57,7 @@
     "process": "^0.11.10",
     "puppeteer": "^22.8.2",
     "standard": "^17.1.0",
+    "esbuild-loader": "^4.0.0",
     "webpack": "^5.10.2",
     "webpack-cli": "^6.0.1"
   }
