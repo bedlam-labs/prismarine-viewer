@@ -91,11 +91,13 @@ class Entities {
     if (!this.entities[entity.id]) {
       const mesh = getEntityMesh(entity, this.scene)
       if (!mesh) return
+      mesh.userData.entityData = {}
       this.entities[entity.id] = mesh
       this.scene.add(mesh)
     }
 
     const e = this.entities[entity.id]
+    Object.assign(e.userData.entityData, entity)
 
     if (entity.delete) {
       this.scene.remove(e)
